@@ -9,9 +9,12 @@ en un programa de doctorado porque tenga una titulación igual o superior a un m
 en la medida de lo posible, la gestión y uso de excepciones, así como la posibilidad de crear un 
 programa donde se use la clase persona. Tenga en cuenta, además de las consiguientes 
 consideraciones semánticas del problema, los siguientes requisitos para el programa:
+
 • La interfaz de usuario será en línea de comando. Se tienen que desarrollar clases con 
 métodos específicos para leer de teclado y escribir en pantalla cadenas y números. 
+
 • Utilice excepciones en aquellos puntos del programa donde sea necesario controlar el 
 flujo del programa.  
+
 • No acople las clases de dominio con interfaz de usuario (p.ej. no genere salidas por 
 pantalla en las clases de la lógica de dominio)
