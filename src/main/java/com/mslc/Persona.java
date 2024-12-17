@@ -5,6 +5,7 @@ import java.time.Period;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
+import java.util.Arrays;
 
 enum Titulacion {
     ESO, BACHILLERATO, FP, GRADO, MASTER, DOCTORADO
@@ -19,46 +20,108 @@ public class Persona {
     private String certificacionIngles;
     private String numeroTelefono;
     private String correoElectronico;
+    private static final List<String> NACIONALIDADES_EUROPEAS = Arrays.asList(
+    	    "alemana", "andorrana", "austriaca", "belga", "bielorrusa", "bosnia y herzegovina", "búlgara", "checa", "chipriota",
+    	    "croata", "danesa", "eslovaca", "eslovena", "española", "estonia", "finlandesa", "francesa", "georgiana", "griega",
+    	    "húngara", "islandesa", "irlandesa", "italiana", "kosovar", "letona", "liechtenstein", "lituana", "luxemburguesa",
+    	    "macedonia del norte", "maltesa", "moldava", "monegasca", "montenegrina", "neerlandesa", "noruega", "polaca",
+    	    "portuguesa", "inglesa", "escocesa", "galesa", "norirlandesa", "rumano", "rusa", "sanmarinense", "serbia", "sueca", 
+    	    "suiza", "ucraniana", "vaticana"
+    	);
 
-    public Persona(String nombre, String apellidos, Date fechaNacimiento, String nacionalidad, List<Titulacion> titulacion, String certificacionIngles, String numeroTelefono, String correoElectronico) {
-        this.nombre = nombre;
-        this.apellidos = apellidos;
-        this.fechaNacimiento = fechaNacimiento.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-        this.nacionalidad = nacionalidad;
-        this.titulacion = titulacion;
-        this.certificacionIngles = certificacionIngles;
-        this.numeroTelefono = numeroTelefono;
-        this.correoElectronico = correoElectronico;
+    public Persona(String nombre, String apellidos, Date fechaNacimiento, String nacionalidad,
+                   List<Titulacion> titulacion, String certificacionIngles, String numeroTelefono, String correoElectronico) {
+        this.setNombre(nombre);
+        this.setApellidos(apellidos);
+        this.setFechaNacimiento(fechaNacimiento);
+        this.setNacionalidad(nacionalidad);
+        this.setTitulacion(titulacion);
+        this.setCertificacionIngles(certificacionIngles);
+        this.setNumeroTelefono(numeroTelefono);
+        this.setCorreoElectronico(correoElectronico);
     }
 
+    
+    public void setNombre(String nombre) {
+        if (nombre != null && !nombre.isEmpty()) {
+            this.nombre = nombre;
+        } else {
+            throw new IllegalArgumentException("El nombre no puede ser nulo o vacío.");
+        }
+    }
+
+    public void setApellidos(String apellidos) {
+        if (apellidos != null && !apellidos.isEmpty()) {
+            this.apellidos = apellidos;
+        } else {
+            throw new IllegalArgumentException("Los apellidos no pueden ser nulos o vacíos.");
+        }
+    }
+
+    public void setFechaNacimiento(Date fechaNacimiento) {
+        if (fechaNacimiento == null) {
+            throw new IllegalArgumentException("La fecha de nacimiento no puede ser nula.");
+        }
+        LocalDate fechaNacLocal = fechaNacimiento.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        if (fechaNacLocal.isAfter(LocalDate.now())) {
+            throw new IllegalArgumentException("La fecha de nacimiento no puede ser futura.");
+        }
+        this.fechaNacimiento = fechaNacLocal;
+    }
+
+    public void setNacionalidad(String nacionalidad) {
+        if (nacionalidad != null && !nacionalidad.isEmpty()) {
+            this.nacionalidad = nacionalidad;
+        } else {
+            throw new IllegalArgumentException("La nacionalidad no puede ser nula o vacía.");
+        }
+    }
+
+    public void setTitulacion(List<Titulacion> titulacion) {
+        if (titulacion != null && !titulacion.isEmpty()) {
+            this.titulacion = titulacion;
+        } else {
+            throw new IllegalArgumentException("La lista de titulaciones no puede ser nula o vacía.");
+        }
+    }
+
+    public void setCertificacionIngles(String certificacionIngles) {
+        this.certificacionIngles = certificacionIngles; // Opcional, puede ser nulo o vacío
+    }
+
+    public void setNumeroTelefono(String numeroTelefono) {
+        if (numeroTelefono != null && numeroTelefono.matches("^\\+?\\d{7,15}$")) {
+            this.numeroTelefono = numeroTelefono;
+        } else {
+            throw new IllegalArgumentException(
+                "El número de teléfono no es válido. Debe contener entre 7 y 15 dígitos y no incluir letras ni caracteres especiales (salvo un prefijo '+')."
+            );
+        }
+    }
+
+    public void setCorreoElectronico(String correoElectronico) {
+        if (correoElectronico != null && correoElectronico.matches("^[\\w.%+-]+@[\\w.-]+\\.[a-zA-Z]{2,}$")) {
+            this.correoElectronico = correoElectronico;
+        } else {
+            throw new IllegalArgumentException("El correo electrónico no es válido.");
+        }
+    }
+
+    
     public int getEdad() {
-        int edad = Period.between(fechaNacimiento, LocalDate.now()).getYears();
-        System.out.println("Edad: " + edad); // Línea de depuración
-        return edad;
-    }
-
-    public List<Titulacion> getTitulacion() {
-        return titulacion;
+        return Period.between(fechaNacimiento, LocalDate.now()).getYears();
     }
 
     public boolean esMayorEdad() {
-        System.out.println("Llamando a esMayorEdad"); // Línea de depuración
-        boolean mayorEdad = getEdad() >= 18;
-        System.out.println("Es mayor de edad: " + mayorEdad); // Línea de depuración
-        return mayorEdad;
+        return getEdad() >= 18;
     }
 
     public boolean esEuropeo() {
-        System.out.println("Llamando a esEuropeo"); // Línea de depuración
-        boolean europeo = "Española".equalsIgnoreCase(nacionalidad) || "Europea".equalsIgnoreCase(nacionalidad);
-        System.out.println("Es europeo: " + europeo); // Línea de depuración
-        return europeo;
+    	boolean europeo = NACIONALIDADES_EUROPEAS.contains(nacionalidad.toLowerCase());
+    	return europeo;
     }
 
     public boolean puedeHacerDoctorado() {
-        System.out.println("Llamando a puedeHacerDoctorado"); // Línea de depuración
-        boolean puedeDoctorado = titulacion.contains(Titulacion.GRADO) || titulacion.contains(Titulacion.MASTER);
-        System.out.println("Puede hacer doctorado: " + puedeDoctorado); // Línea de depuración
-        return puedeDoctorado;
+        return titulacion.contains(Titulacion.GRADO) || titulacion.contains(Titulacion.MASTER);
     }
 }
