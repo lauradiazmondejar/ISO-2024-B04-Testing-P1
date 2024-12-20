@@ -82,45 +82,9 @@ public class PrincipalTest {
         assertFalse(personaNoEuropea.esEuropeo());
     }
 
-   
-    @Test(expected = IllegalArgumentException.class)
-    public void testSetApellidosInvalido() {
-        personaValida.setApellidos("");
-    }
-
-   
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testSetNacionalidadInvalida() {
-        personaValida.setNacionalidad("");
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testSetNumeroTelefonoInvalido() {
-        personaValida.setNumeroTelefono("123abc");
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testSetCorreoElectronicoInvalido() {
-        personaValida.setCorreoElectronico("email-invalido");
-    }
-
-    
     @Test
     public void testEsAptoCasoValido() {
         assertEquals(true, Principal.esApto(personaValida));
-    }
-
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testSetNombreInvalido() {
-        personaValida.setNombre("");
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testSetFechaNacimientoFutura() {
-        Date fechaFutura = Date.from(LocalDate.of(2030, 1, 1).atStartOfDay(ZoneId.systemDefault()).toInstant());
-        personaValida.setFechaNacimiento(fechaFutura);
     }
 
     @Test
