@@ -107,7 +107,38 @@ public class Persona {
         }
     }
 
-    
+    public String getNombre() {
+        return nombre;
+    }
+
+    public String getApellidos() {
+        return apellidos;
+    }
+
+    public LocalDate getFechaNacimiento() {
+        return fechaNacimiento;
+    }
+
+    public String getNacionalidad() {
+        return nacionalidad;
+    }
+
+    public List<Titulacion> getTitulacion() {
+        return titulacion;
+    }
+
+    public String getCertificacionIngles() {
+        return certificacionIngles;
+    }
+
+    public String getNumeroTelefono() {
+        return numeroTelefono;
+    }
+
+    public String getCorreoElectronico() {
+        return correoElectronico;
+    }
+
     public int getEdad() {
         return Period.between(fechaNacimiento, LocalDate.now()).getYears();
     }
